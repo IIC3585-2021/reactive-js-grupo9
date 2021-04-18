@@ -13,4 +13,4 @@ const pong = {
   }
 };
 
-const KEYS = { LEFT: 37, RIGHT: 39 };
+const KEYS = { LEFT: 37, RIGHT: 39 ,LEFT2: 68, RIGHT2: 65} ;

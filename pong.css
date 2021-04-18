@@ -2,7 +2,7 @@ body { font-family: sans-serif; }
 
 #playground {
   background: black;
-  width: 300px;
+  width: 350px;
   height: 400px;
   position: relative;
   overflow: hidden;
@@ -25,6 +25,16 @@ body { font-family: sans-serif; }
 
 #racket {
   background: yellow;
+  left: 110px;
+  top: 360px;
+  position: absolute;
+  width: 80px;
+  height: 20px;
+  border-radius: 20%;
+}
+
+#racket2 {
+  background: orange;
   left: 110px;
   top: 360px;
   position: absolute;

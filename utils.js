@@ -1,12 +1,22 @@
-const moveRacket = (pong) => {
+const moveRacketDown = (pong) => {
     const left = $('#racket')[0].offsetLeft;
     return pong.pressedKeys[KEYS.LEFT] ? left - 5 : (pong.pressedKeys[KEYS.RIGHT] ? left + 5 : left);
   }
+
+  const moveRacketUp = (pong) => {
+    const left = $('#racket2')[0].offsetLeft;
+    return pong.pressedKeys[KEYS.LEFT2] ? left + 5 : (pong.pressedKeys[KEYS.RIGHT2] ? left - 5 : left);
+  }
+
   
-  const drawRacket = (pixelPos) => {
+  const drawRacketDown = (pixelPos) => {
     $('#racket')[0].style.left = pixelPos + 'px';
   }
   
+  const drawRacketUp = (pixelPos) => {
+    $('#racket2')[0].style.left = pixelPos + 'px';
+    $('#racket2')[0].style.top = 15 + 'px';
+  }
   
   const moveBallDirectionX = (ball) => {
     const width = $('#playground')[0].offsetWidth
@@ -43,6 +53,11 @@ const moveRacket = (pong) => {
     const ballSize = $('#ball')[0].offsetHeight;
     return $('#racket')[0].offsetTop - ballSize / 2; // subtracting size of ball for doesn't pass through racket
   }
+
+  const racketUpPositionY = () => {
+    const ballSize = $('#ball')[0].offsetHeight;
+    return $('#racket2')[0].offsetTop - ballSize / 2; // subtracting size of ball for doesn't pass through racket
+  }
   
   const nextPosition = (type) => {
     return (ball) => {return type === "X" ? ball.x + ball.speed * ball.directionX : ball.y + ball.speed * ball.directionY}
@@ -56,6 +71,17 @@ const moveRacket = (pong) => {
     const racketPosY        = racketPositionY();
     return (posX >= racketBorderLeft && 
             posX <= racketBorderRight && 
+            posY >= racketPosY);
+  }
+
+  const isRacketUpHit = (ball) => {
+    const racketUpBorderLeft  = $('#racket2')[0].offsetLeft;
+    const racketUpBorderRight = racketBorderLeft + $('#racket2')[0].offsetWidth;
+    const posX              = nextPosition("X")(ball);
+    const posY              = nextPosition("Y")(ball);
+    const racketPosY        = racketUpPositionY();
+    return (posX >= racketUpBorderLeft && 
+            posX <= racketUpBorderRight && 
             posY >= racketPosY);
   }
   

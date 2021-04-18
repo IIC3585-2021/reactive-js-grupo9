@@ -11,8 +11,10 @@ const load = () => {
       newPosX        = newDirX.map((dirX) => { return moveBallPosition(pong.ball, dirX) }),
       newPosY        = newDirY.map((dirY) => { return moveBallPosition(pong.ball, dirY) }),
       newBallPos     = Rx.Observable.zip(newDirX, newDirY, newPosX, newPosY, buildPosition),
-      moveRacketPos  = loop.map(() => { return moveRacket(pong) }),
+      moveRacketDownPos  = loop.map(() => { return moveRacketDown(pong) }),
+      moveRacketUpPos  = loop.map(() => { return moveRacketUp(pong) }),
       hit            = loop.filter(() => { return isRacketHit(pong.ball) }),
+      hitUp            = loop.filter(() => { return isRacketUpHit(pong.ball) }),
       gameOver       = loop.filter(() => { return isGameOver(pong.ball) });
 
   keyDown.subscribe((event) => { pong.pressedKeys[event.which] = true  }); // editando pong
@@ -22,9 +24,11 @@ const load = () => {
 
   newBallPos.subscribe((pos) => { changeBallPosition(pong.ball, pos) }); // editando pong
 
-  moveRacketPos.subscribe((pixelPos) => { drawRacket(pixelPos); });
+  moveRacketDownPos.subscribe((pixelPos) => { drawRacketDown(pixelPos); });
+  moveRacketUpPos.subscribe((pixelPos) => { drawRacketUp(pixelPos); });
 
   hit.subscribe(() => { changeDirectionY(pong) }); // editando pong
+  hitUp.subscribe(() => { changeDirectionY(pong) }); // editando pong
 
   gameOver.subscribe(() => { endGame(pong) }); // editando pong
 }
