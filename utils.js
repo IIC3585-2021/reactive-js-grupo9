@@ -55,8 +55,7 @@ const moveRacketDown = (pong) => {
   }
 
   const racketUpPositionY = () => {
-    const ballSize = $('#ball')[0].offsetHeight;
-    return $('#racket2')[0].offsetTop - ballSize / 2; // subtracting size of ball for doesn't pass through racket
+    return $('#racket2')[0].offsetTop; // subtracting size of ball for doesn't pass through racket
   }
   
   const nextPosition = (type) => {
@@ -76,13 +75,16 @@ const moveRacketDown = (pong) => {
 
   const isRacketUpHit = (ball) => {
     const racketUpBorderLeft  = $('#racket2')[0].offsetLeft;
-    const racketUpBorderRight = racketBorderLeft + $('#racket2')[0].offsetWidth;
+    const racketUpBorderRight = racketUpBorderLeft + $('#racket2')[0].offsetWidth;
     const posX              = nextPosition("X")(ball);
     const posY              = nextPosition("Y")(ball);
     const racketPosY        = racketUpPositionY();
-    return (posX >= racketUpBorderLeft && 
-            posX <= racketUpBorderRight && 
-            posY >= racketPosY);
+    const bottomPos2  = $('#racket2')[0].offsetHeight;
+    const buleano = posX >= racketUpBorderLeft && 
+    posX <= racketUpBorderRight && 
+    posY <= racketPosY + bottomPos2;
+    console.log(buleano)
+    return (buleano); // cambié el ultimo signo
   }
   
   const changeScore = (pong) => {
@@ -93,8 +95,8 @@ const moveRacketDown = (pong) => {
     $('#score')[0].innerHTML = score;
   }
   
-  const changeDirectionY = (pong) => {
-    pong.ball.directionY = -1;
+  const changeDirectionY = (pong, direction) => {
+    pong.ball.directionY = direction;
     changeScore(pong);
     drawScore(pong.score);
   }
@@ -103,7 +105,8 @@ const moveRacketDown = (pong) => {
     const bottomPos  = $('#racket')[0].offsetHeight;
     const posY       = nextPosition("Y")(ball) - bottomPos;
     const racketPosY = racketPositionY();
-    return posY > racketPosY;
+    const racket2PosY = racketUpPositionY();
+    return (posY > racketPosY) | posY < racket2PosY;
   }
   
   const endGame = (pong) => {

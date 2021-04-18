@@ -27,8 +27,8 @@ const load = () => {
   moveRacketDownPos.subscribe((pixelPos) => { drawRacketDown(pixelPos); });
   moveRacketUpPos.subscribe((pixelPos) => { drawRacketUp(pixelPos); });
 
-  hit.subscribe(() => { changeDirectionY(pong) }); // editando pong
-  hitUp.subscribe(() => { changeDirectionY(pong) }); // editando pong
+  hit.subscribe(() => { changeDirectionY(pong, -1) }); // editando pong
+  hitUp.subscribe(() => { changeDirectionY(pong, 1) }); // editando pong
 
   gameOver.subscribe(() => { endGame(pong) }); // editando pong
 }
