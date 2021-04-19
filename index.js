@@ -1,20 +1,16 @@
 import { fromEvent, interval, zip } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import {
-    moveBallDirectionX,
-    moveBallDirectionY,
     moveBallPosition,
-    moveRacketDown,
-    moveRacketUp,
-    isRacketHit,
+    moveRacket,
+    isRacketsHit,
+    moveBallDirection,
     isGameOver,
     startRunning,
     changeBallPosition,
-    drawRacketDown,
-    drawRacketUp,
+    drawRacket,
     changeDirectionY,
     endGame,
-    isRacketUpHit
   } from "./utils.js";
 
 const load = () => {
@@ -37,15 +33,15 @@ const load = () => {
       interval_      = interval(16),
       loop           = interval_.pipe(filter(() => {return pong.status === 'RUNNING';})),
       stopped         = keyDown.pipe(filter(() => {return pong.status === 'STOPPED';})),
-      newDirX        = loop.pipe(map(() => moveBallDirectionX(pong.ball))),
-      newDirY        = loop.pipe(map(() => moveBallDirectionY(pong.ball))),
+      newDirX        = loop.pipe(map(() => moveBallDirection("X")(pong.ball))),
+      newDirY        = loop.pipe(map(() => moveBallDirection("Y")(pong.ball))),
       newPosX        = newDirX.pipe(map((dirX) => moveBallPosition(pong.ball, dirX))),
       newPosY        = newDirY.pipe(map((dirY) => moveBallPosition(pong.ball, dirY))),
       newBallPos     = zip(newDirX, newDirY, newPosX, newPosY),
-      moveRacketDownPos  = loop.pipe(map(() => moveRacketDown(pong))),
-      moveRacketUpPos  = loop.pipe(map(() => moveRacketUp(pong))),
-      hit            = loop.pipe(filter(() => isRacketHit(pong.ball))),
-      hitUp          = loop.pipe(filter(() => isRacketUpHit(pong.ball))),
+      moveRacketDownPos  = loop.pipe(map(() => moveRacket("")(pong))),
+      moveRacketUpPos  = loop.pipe(map(() => moveRacket("2")(pong))),
+      hit            = loop.pipe(filter(() => isRacketsHit("")(pong.ball))),
+      hitUp          = loop.pipe(filter(() => isRacketsHit("2")(pong.ball))),
       gameOver       = loop.pipe(filter(() => isGameOver(pong)));
 
   keyDown.subscribe((event) => { pong.pressedKeys[event.which] = true  }); // editando pong
@@ -55,8 +51,8 @@ const load = () => {
 
   newBallPos.subscribe((pos) => { changeBallPosition(pong.ball, pos) }); // editando pong
 
-  moveRacketDownPos.subscribe((pixelPos) => { drawRacketDown(pixelPos); });
-  moveRacketUpPos.subscribe((pixelPos) => { drawRacketUp(pixelPos); });
+  moveRacketDownPos.subscribe((pixelPos) => { drawRacket("")(pixelPos); });
+  moveRacketUpPos.subscribe((pixelPos) => { drawRacket("2")(pixelPos); });
 
   hit.subscribe(() => { changeDirectionY(pong, -1) }); // editando pong
   hitUp.subscribe(() => { changeDirectionY(pong, 1) }); // editando pong
