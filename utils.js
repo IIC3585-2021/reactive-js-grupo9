@@ -6,6 +6,10 @@ const nextPosition = (type) => {
   return (ball) => {return type === "X" ? ball.x + ball.speed * ball.directionX : ball.y + ball.speed * ball.directionY}
 }
 
+const getRandomArbitrary = (min, max) => {
+  return Math.floor(Math.random() * (max + 1 - min) + min);
+}
+
 export const moveRacket = (racket) => {
   const left = $(`#racket${racket}`)[0].offsetLeft;
   const keys = racket === "" ? [KEYS.LEFT, KEYS.RIGHT, -5, 5] : [KEYS.LEFT2, KEYS.RIGHT2, 5, -5]
@@ -66,8 +70,8 @@ export const changeDirectionY = (pong, direction) => {
 
 export const isGameOver = (pong) => {
   const posY  = pong.ball.y;
-  const offsetY         = $('#ball')[0].offsetHeight;
-  if(posY === $('#playground')[0].offsetHeight){
+  const offsetY = $('#ball')[0].offsetHeight;
+  if(posY + offsetY === $('#playground')[0].offsetHeight){
     pong.scorePlayerUp ++;
     $('#scoreup')[0].innerHTML = pong.scorePlayerUp;
   }
@@ -80,12 +84,14 @@ export const isGameOver = (pong) => {
 
 export const endGame = (pong) => {
   pong.status = 'STOPPED';
-  pong.ball.x = 350;
-  pong.ball.y = 350;
-  drawEndGame();
-}
-
-export const drawEndGame = () => {
+  const heigth = $('#playground')[0].offsetHeight;
+  const min_heigth = Math.floor(heigth / 2 - heigth / 8);
+  const max_heigth = Math.floor(heigth / 2 + heigth / 8);
+  const max_width = $('#playground')[0].offsetWidth - $('#ball')[0].offsetWidth;
+  pong.ball.y = Math.ceil(getRandomArbitrary(min_heigth, max_heigth) / 5) * 5;
+  pong.ball.x = Math.ceil(getRandomArbitrary(0, max_width) / 5) * 5;
+  pong.ball.directionX = getRandomArbitrary(0, 1) === 0 ? -1 : 1;
+  pong.ball.directionY = getRandomArbitrary(0, 1) === 0 ? -1 : 1;
   $('#game-over')[0].style.display = 'block';
 }
 
