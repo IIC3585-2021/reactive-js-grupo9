@@ -2,8 +2,8 @@ body { font-family: sans-serif; }
 
 #playground {
   background: black;
-  width: 350px;
-  height: 400px;
+  width: 550px;
+  height: 600px;
   position: relative;
   overflow: hidden;
 }
@@ -19,14 +19,14 @@ body { font-family: sans-serif; }
   width: 30px;
   height: 30px;
   left: 135px;
-  top: 100px;
+  top: 400px;
   border-radius: 15px;
 }
 
 #racket {
   background: yellow;
   left: 110px;
-  top: 360px;
+  top: 560px;
   position: absolute;
   width: 80px;
   height: 20px;
@@ -36,7 +36,7 @@ body { font-family: sans-serif; }
 #racket2 {
   background: orange;
   left: 110px;
-  top: 360px;
+  top: 15px;
   position: absolute;
   width: 80px;
   height: 20px;
@@ -46,10 +46,11 @@ body { font-family: sans-serif; }
 #start-message, #game-over { 
   color: yellow;
   position: absolute;
-  top: 50%;
-  left: 23%;
+  top: 40%;
+  left: 20%;
   text-align: center;
   font-weight: bold;
 }
+
 
 #game-over { display: none; }

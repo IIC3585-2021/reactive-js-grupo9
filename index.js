@@ -21,11 +21,12 @@ const load = () => {
     var pong = {
         status: "STOPPED",
         pressedKeys: [],
-        score: 0,
+        scorePlayerDown: 0,
+        scorePlayerUp: 0,
         ball: {
           speed: 5,
           x: 135,
-          y: 100,
+          y: 400,
           directionX: -1,
           directionY: -1
         }
@@ -45,7 +46,7 @@ const load = () => {
       moveRacketUpPos  = loop.pipe(map(() => moveRacketUp(pong))),
       hit            = loop.pipe(filter(() => isRacketHit(pong.ball))),
       hitUp          = loop.pipe(filter(() => isRacketUpHit(pong.ball))),
-      gameOver       = loop.pipe(filter(() => isGameOver(pong.ball)));
+      gameOver       = loop.pipe(filter(() => isGameOver(pong)));
 
   keyDown.subscribe((event) => { pong.pressedKeys[event.which] = true  }); // editando pong
   keyUp.subscribe((event) => { pong.pressedKeys[event.which] = false }); // editando pong
