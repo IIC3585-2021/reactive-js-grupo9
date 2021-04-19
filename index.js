@@ -30,7 +30,7 @@ const load = () => {
 
   const keyDown      = fromEvent(document, 'keydown'),
       keyUp          = fromEvent(document, 'keyup'),
-      interval_      = interval(16),
+      interval_      = interval(100),
       loop           = interval_.pipe(filter(() => {return pong.status === 'RUNNING';})),
       stopped         = keyDown.pipe(filter(() => {return pong.status === 'STOPPED';})),
       newDirX        = loop.pipe(map(() => moveBallDirection("X")(pong.ball))),
