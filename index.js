@@ -16,7 +16,7 @@ import {
   } from "./utils.js";
 
 const load = () => {
-    var pong = {
+    const pong = {
         status: "STOPPED",
         pressedKeys: [],
         scorePlayerDown: 0,

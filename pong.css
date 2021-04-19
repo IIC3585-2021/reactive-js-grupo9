@@ -1,8 +1,6 @@
 body { font-family: sans-serif; }
 
 h1 {
-  font-family: monaco;
-  font-size: xx-large;
   color: yellow;
 }
 
@@ -10,10 +8,6 @@ span {
   color:rgb(229, 255, 0)
 }
 
-.messages {
-  font-family: monaco;
-  font-size: xx-large;
-}
 
 #playground {
   background: black;
@@ -60,14 +54,10 @@ span {
 
 .up-player {
   color: rgb(225, 0, 255);
-  font-family: monaco;
-  font-size: xx-large;
 }
 
 .down-player {
   color: rgb(4, 247, 247);
-  font-family: monaco;
-  font-size: xx-large;
 }
 
 #start-message, #game-over { 
