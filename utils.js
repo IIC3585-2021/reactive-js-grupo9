@@ -6,38 +6,23 @@ const nextPosition = (type) => {
   return (ball) => {return type === "X" ? ball.x + ball.speed * ball.directionX : ball.y + ball.speed * ball.directionY}
 }
 
-export const moveRacketUp = (pong) => {
-  const left = $('#racket2')[0].offsetLeft;
-  return pong.pressedKeys[KEYS.LEFT2] ? left + 5 : (pong.pressedKeys[KEYS.RIGHT2] ? left - 5 : left);
-}
-
-export const moveRacketDown = (pong) => {
-    const left = $('#racket')[0].offsetLeft;
-    return pong.pressedKeys[KEYS.LEFT] ? left - 5 : (pong.pressedKeys[KEYS.RIGHT] ? left + 5 : left);
-  }
-  
-export const drawRacketDown = (pixelPos) => {
-    $('#racket')[0].style.left = pixelPos + 'px';
+  export const moveRacket = (racket) => {
+    const left = $(`#racket${racket}`)[0].offsetLeft;
+    const keys = racket === "" ? [KEYS.LEFT, KEYS.RIGHT, -5, 5] : [KEYS.LEFT2, KEYS.RIGHT2, 5, -5]
+    return (pong) => {return pong.pressedKeys[keys[0]] ? left + keys[2] : (pong.pressedKeys[keys[1]] ? left + keys[3] : left)}
   }
 
-export const drawRacketUp = (pixelPos) => {
-    $('#racket2')[0].style.left = pixelPos + 'px';
-    $('#racket2')[0].style.top = 15 + 'px';
-  }
-  
-export  const moveBallDirectionX = (ball) => {
-    const width = $('#playground')[0].offsetWidth
-    const directionX = ball.directionX;
-    const positionX = nextPosition("X")(ball);
-    return positionX > width ? (positionX < 0 ? 1 : -1) : (positionX < 0 ? 1 : directionX)
-  }
-  
-export const moveBallDirectionY = (ball) => {
-  const height = $('#playground')[0].offsetHeight;
-  const directionY = ball.directionY;
-  const positionY = nextPosition("Y")(ball);
-  return positionY > height ? (positionY < 0 ? 1 : -1) : (positionY < 0 ? 1 : directionY)
+export const drawRacket = (racket) => {
+  return (pixelPos) => {$(`#racket${racket}`)[0].style.left = pixelPos + 'px'}
 }
+  
+export const moveBallDirection = (dir) => {
+  const param = dir === "X" ? $('#playground')[0].offsetWidth : $('#playground')[0].offsetHeight;
+  return (ball) => {
+    const direction = dir === "X" ? ball.directionX : ball.directionY;
+    const nextPos = nextPosition(dir)(ball);
+    return nextPos > param ? (nextPos < 0 ? 1 : -1) : (nextPos < 0 ? 1 : direction);
+  }}
 
 export  const moveBallPosition = (ball, direction) => {
   return ball.speed * direction;
@@ -56,38 +41,23 @@ export const drawBall = (ball) => {
   $('#ball')[0].style.top  = ball.y + 'px';
 }
 
-export const racketPositionY = () => {
+export const racketsPositionY = (racket) => {
   const ballSize = $('#ball')[0].offsetHeight;
-  return $('#racket')[0].offsetTop - ballSize / 2; // subtracting size of ball for doesn't pass through racket
+  return $(`#racket${racket}`)[0].offsetTop - ballSize / 2;
 }
 
-export const racketUpPositionY = () => {
-  const ballSize = $('#ball')[0].offsetHeight;
-  return $('#racket2')[0].offsetTop - ballSize / 2; // subtracting size of ball for doesn't pass through racket
-}
-
-export const isRacketHit = (ball) => {
-  const racketBorderLeft  = $('#racket')[0].offsetLeft;
-  const racketBorderRight = racketBorderLeft + $('#racket')[0].offsetWidth;
-  const posX              = nextPosition("X")(ball);
-  const posY              = nextPosition("Y")(ball);
-  const racketPosY        = racketPositionY();
-  return (posX >= racketBorderLeft && 
-          posX <= racketBorderRight && 
-          posY >= racketPosY);
-}
-
-export const isRacketUpHit = (ball) => {
-  const racketUpBorderLeft  = $('#racket2')[0].offsetLeft;
-  const racketUpBorderRight = racketUpBorderLeft + $('#racket2')[0].offsetWidth;
-  const posX              = nextPosition("X")(ball);
-  const posY              = nextPosition("Y")(ball);
-  const racketPosY        = racketUpPositionY();
-  const bottomPos2        = $('#racket2')[0].offsetHeight;
-  return (posX >= racketUpBorderLeft && 
-          posX <= racketUpBorderRight && 
-          posY <= racketPosY + bottomPos2);
-}
+export const isRacketsHit = (racket) => {
+  const racketBorderLeft  = $(`#racket${racket}`)[0].offsetLeft;
+  const racketBorderRight = racketBorderLeft + $(`#racket${racket}`)[0].offsetWidth;
+  const racketPosY        = racketsPositionY(racket);
+  const bottomPos2        = racket === "2" ? $(`#racket${racket}`)[0].offsetHeight : 0;
+  return (ball) => {
+    const posX            = nextPosition("X")(ball);
+    const posY            = nextPosition("Y")(ball);
+    const caseDown = posX >= racketBorderLeft && posX <= racketBorderRight && posY >= racketPosY;
+    const caseUp = posX >= racketBorderLeft && posX <= racketBorderRight && posY <= racketPosY + bottomPos2;
+    return (racket === "" ? caseDown : caseUp)
+}}
 
 export const changeDirectionY = (pong, direction) => {
   pong.ball.directionY = direction;
@@ -96,8 +66,8 @@ export const changeDirectionY = (pong, direction) => {
 export const isGameOver = (pong) => {
   const bottomPos  = $('#racket')[0].offsetHeight;
   const posY       = nextPosition("Y")(pong.ball) - bottomPos;
-  const racketPosY = racketPositionY();
-  const racket2PosY = racketUpPositionY();
+  const racketPosY = racketsPositionY("");
+  const racket2PosY = racketsPositionY("2");
   if(posY > racketPosY){
     pong.scorePlayerUp ++;
     $('#scoreup')[0].innerHTML = pong.scorePlayerUp;
