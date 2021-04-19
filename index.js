@@ -1,3 +1,5 @@
+// Código basado en
+// http://hlmerscher.github.io/pong-rxjs
 import { fromEvent, interval, zip } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import {
