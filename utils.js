@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-const KEYS = { LEFT: 37, RIGHT: 39 ,LEFT2: 68, RIGHT2: 65} ;
+const KEYS = { LEFT: 37, RIGHT: 39 ,LEFT2: 68, RIGHT2: 65, SPACEBAR:32 } ;
 
 const nextPosition = (type) => {
   return (ball) => {return type === "X" ? ball.x + ball.speed * ball.directionX : ball.y + ball.speed * ball.directionY}
@@ -62,7 +62,8 @@ export const racketPositionY = () => {
 }
 
 export const racketUpPositionY = () => {
-  return $('#racket2')[0].offsetTop; // subtracting size of ball for doesn't pass through racket
+  const ballSize = $('#ball')[0].offsetHeight;
+  return $('#racket2')[0].offsetTop - ballSize / 2; // subtracting size of ball for doesn't pass through racket
 }
 
 export const isRacketHit = (ball) => {
@@ -87,37 +88,42 @@ export const isRacketUpHit = (ball) => {
           posX <= racketUpBorderRight && 
           posY <= racketPosY + bottomPos2);
 }
-  
-export const changeScore = (pong) => {
-  pong.score++;
-}
-  
-export const drawScore = (score) => {
-  $('#score')[0].innerHTML = score;
-}
 
 export const changeDirectionY = (pong, direction) => {
   pong.ball.directionY = direction;
-  changeScore(pong);
-  drawScore(pong.score);
 }
 
-export const isGameOver = (ball) => {
+export const isGameOver = (pong) => {
   const bottomPos  = $('#racket')[0].offsetHeight;
-  const posY       = nextPosition("Y")(ball) - bottomPos;
+  const posY       = nextPosition("Y")(pong.ball) - bottomPos;
   const racketPosY = racketPositionY();
   const racket2PosY = racketUpPositionY();
-  return (posY > racketPosY) | posY < racket2PosY;
+  if(posY > racketPosY){
+    pong.scorePlayerUp ++;
+    $('#scoreup')[0].innerHTML = pong.scorePlayerUp;
+  }
+  else if(posY < racket2PosY){
+    pong.scorePlayerDown ++;
+    $('#scoredown')[0].innerHTML = pong.scorePlayerDown;
+  }
+  return (posY > racketPosY) | (posY < racket2PosY);
 }
 
 export const endGame = (pong) => {
-  pong.status = 'GAMEOVER';
+  pong.status = 'STOPPED';
+  pong.ball.x = 350;
+  pong.ball.y = 350;
   drawEndGame();
+  if (pong.pressedKeys[KEYS.SPACEBAR]){
+    $('#game-over')[0].style.display = 'none';
+    pong.status = 'RUNNING';
+  }
 }
 
 export const drawEndGame = () => {
   $('#game-over')[0].style.display = 'block';
 }
+
 
 export const buildPosition = (dirX, dirY, x, y) => {
   return { directionX: dirX, directionY: dirY, x: x, y: y };
