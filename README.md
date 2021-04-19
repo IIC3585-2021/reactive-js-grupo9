@@ -10,12 +10,15 @@ Para correr el servidor:
 npm run dev
 ```
 
+Luego, entrar a <http://localhost:1234/>
+  
+  
+
 Extra: si existe problemas para instalar parcel
 ```
 npm install -g parcel-bundler
 ```
 
-Luego, entrar a <http://localhost:1234/>
 
 ## Integrantes:
 * Pablo Garnham
